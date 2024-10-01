@@ -3,13 +3,14 @@ package com.assignment.ordermanagementapi.repository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.assignment.ordermanagementapi.entity.Client;
 import com.assignment.ordermanagementapi.entity.Order;
 
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    List<Order> findByClient_Id(Long clientId, Pageable pageable);
+    List<Order> findByClient(Client client,  Pageable pageable);;
 
     List<Order> findByStatus(String status);
     

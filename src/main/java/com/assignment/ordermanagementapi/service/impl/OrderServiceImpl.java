@@ -93,7 +93,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public List<Order> fetchOrderHistory(Long clientId, Pageable pageable) {
-        return orderRepository.findByClient_Id(clientId, pageable);
+        Client client = clientRepository.findById(clientId).orElseThrow();
+        List<Order>  order = orderRepository.findByClient(client, pageable);
+        return order;
     }
 
     public List<Order> getOrdersByState(String state){

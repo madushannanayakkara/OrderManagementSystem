@@ -75,7 +75,7 @@ public class OrderController {
             @PathVariable Long clientId,
             @PathVariable int page, 
             @PathVariable int size) {
-
+        
         List<Order> orderHistory = orderService.fetchOrderHistory(clientId, PageRequest.of(page, size));
         return ResponseEntity.ok(orderHistory);
     }
