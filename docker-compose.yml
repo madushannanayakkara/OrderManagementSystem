@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: MAprasan@a99
+      MYSQL_DATABASE: order_management_sys
+
+  app:
+    image: api-platform
+    depends_on:
+      - mysqldb
+    build: .
+    restart: on-failure
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/order_management_sys?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: MAprasan@a99
