@@ -88,12 +88,12 @@ public class OrderServiceImpl implements OrderService {
             response.put("msg", "You are not authorize to cancelled this order!");
         }
 
-
         return response;
     }
 
-    public List<Order> fetchOrderHistory(Long clientId, Pageable pageable) {
-        Client client = clientRepository.findById(clientId).orElseThrow();
+    public List<Order> fetchOrderHistory(String token, Pageable pageable) {
+        String userEmail = jwtService.extractUserName(token);
+        Client client = clientRepository.findByEmail(userEmail).orElseThrow();
         List<Order>  order = orderRepository.findByClient(client, pageable);
         return order;
     }

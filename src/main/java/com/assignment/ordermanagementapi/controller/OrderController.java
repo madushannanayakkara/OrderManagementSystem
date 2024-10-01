@@ -72,11 +72,14 @@ public class OrderController {
 
     @GetMapping("/history/{clientId}/{page}/{size}")
     public ResponseEntity<List<Order>> fetchOrderHistory(
-            @PathVariable Long clientId,
+            @RequestHeader("Authorization") String token,
+            // @PathVariable Long clientId,
             @PathVariable int page, 
             @PathVariable int size) {
+
+        String extractedToken = token.substring(7);
         
-        List<Order> orderHistory = orderService.fetchOrderHistory(clientId, PageRequest.of(page, size));
+        List<Order> orderHistory = orderService.fetchOrderHistory(extractedToken, PageRequest.of(page, size));
         return ResponseEntity.ok(orderHistory);
     }
     

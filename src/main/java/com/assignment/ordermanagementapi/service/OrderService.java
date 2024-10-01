@@ -15,7 +15,7 @@ public interface OrderService {
 
     Map<String, String> cancelOrder(Long orderId, String token);
 
-    List<Order> fetchOrderHistory(Long clientId, Pageable pageable);
+    List<Order> fetchOrderHistory(String token, Pageable pageable);
 
     List<Order> getOrdersByState(String state);
 
