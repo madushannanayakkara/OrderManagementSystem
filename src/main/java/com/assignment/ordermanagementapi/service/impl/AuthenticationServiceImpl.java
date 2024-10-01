@@ -11,6 +11,7 @@ import com.assignment.ordermanagementapi.dto.JWTAuthenticationResponse;
 import com.assignment.ordermanagementapi.dto.RefreshTokenRequest;
 import com.assignment.ordermanagementapi.dto.SignInRequest;
 import com.assignment.ordermanagementapi.dto.SignUpRequest;
+import com.assignment.ordermanagementapi.dto.SignUpResponse;
 import com.assignment.ordermanagementapi.entity.Client;
 import com.assignment.ordermanagementapi.repository.ClientRepository;
 import com.assignment.ordermanagementapi.service.AuthenticationService;
@@ -30,7 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JWTService jwtService;
 
-    public Client signup(SignUpRequest signUpRequest){
+    public SignUpResponse signup(SignUpRequest signUpRequest){
         if(clientRepository.findByEmail(signUpRequest.getEmail()).isPresent()){
             throw new IllegalArgumentException("User already exist!");
         }
@@ -41,8 +42,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         client.setFirstname(signUpRequest.getFirstname());
         client.setLastname(signUpRequest.getLastname());
         client.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        clientRepository.save(client);
 
-        return clientRepository.save(client);
+        SignUpResponse response = new SignUpResponse();
+        response.setEmail(signUpRequest.getEmail());
+        response.setFirstname(signUpRequest.getFirstname());
+        response.setLastname(signUpRequest.getLastname());
+
+        return response;
     }
 
     public JWTAuthenticationResponse signin(SignInRequest sighInRequest) {

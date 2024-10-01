@@ -1,8 +1,8 @@
 package com.assignment.ordermanagementapi.controller;
 
 import java.util.Map;
+import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,12 +71,12 @@ public class OrderController {
     }
 
     @GetMapping("/history/{clientId}/{page}/{size}")
-    public ResponseEntity<Page<Order>> fetchOrderHistory(
+    public ResponseEntity<List<Order>> fetchOrderHistory(
             @PathVariable Long clientId,
             @PathVariable int page, 
             @PathVariable int size) {
 
-        Page<Order> orderHistory = orderService.fetchOrderHistory(clientId, PageRequest.of(page, size));
+        List<Order> orderHistory = orderService.fetchOrderHistory(clientId, PageRequest.of(page, size));
         return ResponseEntity.ok(orderHistory);
     }
     

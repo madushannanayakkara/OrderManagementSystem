@@ -3,7 +3,6 @@ package com.assignment.ordermanagementapi.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.assignment.ordermanagementapi.dto.OrderCreateRequest;
@@ -16,8 +15,7 @@ public interface OrderService {
 
     Map<String, String> cancelOrder(Long orderId, String token);
 
-    Page<Order> fetchOrderHistory(Long clientId, Pageable pageable);
-    // Map<String, Pageable> fetchOrderHistory(Long clientId, Pageable pageable);
+    List<Order> fetchOrderHistory(Long clientId, Pageable pageable);
 
     List<Order> getOrdersByState(String state);
 

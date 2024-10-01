@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -93,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
         return response;
     }
 
-    public Page<Order> fetchOrderHistory(Long clientId, Pageable pageable) {
+    public List<Order> fetchOrderHistory(Long clientId, Pageable pageable) {
         return orderRepository.findByClient_Id(clientId, pageable);
     }
 
