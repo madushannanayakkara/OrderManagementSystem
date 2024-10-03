@@ -29,7 +29,7 @@ public class SecurityConfiguration {
     private final ClientService clientService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request.requestMatchers("/api/auth/**").permitAll() // Allow public access
                     .requestMatchers("/api/orders/**").hasAuthority("CLIENT") // Only clients can create, update, cancel orders and see history
