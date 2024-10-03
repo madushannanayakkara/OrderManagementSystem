@@ -9,7 +9,6 @@ import com.assignment.ordermanagementapi.dto.OrderCreateRequest;
 import com.assignment.ordermanagementapi.dto.OrderCreateResponse;
 import com.assignment.ordermanagementapi.dto.OrderHistoryResponse;
 import com.assignment.ordermanagementapi.entity.Order;
-import com.assignment.ordermanagementapi.exception.JWTException;
 
 public interface OrderService {
 

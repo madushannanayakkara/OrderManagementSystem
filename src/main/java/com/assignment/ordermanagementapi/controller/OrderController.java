@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.assignment.ordermanagementapi.dto.OrderCreateRequest;
-import com.assignment.ordermanagementapi.exception.JWTException;
 import com.assignment.ordermanagementapi.service.OrderService;
 
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 
 @RestController
