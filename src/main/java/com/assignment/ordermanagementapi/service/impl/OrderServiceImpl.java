@@ -96,6 +96,7 @@ public class OrderServiceImpl implements OrderService {
 
     public OrderHistoryResponse fetchOrderHistory(String token, Pageable pageable) {
         String userEmail = jwtService.extractUserName(token);
+        System.out.println("User Email: " + userEmail);
         Client client = clientRepository.findByEmail(userEmail).orElseThrow();
         OrderHistoryResponse orderHistoryResponse = new OrderHistoryResponse();
 

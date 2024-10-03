@@ -6,6 +6,8 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,15 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@PropertySource("classpath:secrets.properties")
 public class JWTServiceImpl implements JWTService {
+
+    @Value("${jwt.secret}")
+    private String JWT_SECRET;
+
     public String generateToken(UserDetails userDetails){
         return Jwts.builder().setSubject(userDetails.getUsername()) // Set the username as subject
                     .setIssuedAt(new Date(System.currentTimeMillis())) // Set the issue date
@@ -55,8 +63,8 @@ public class JWTServiceImpl implements JWTService {
     }
 
     private SecretKey getSignKey(){
-        // Correctly encoded base64 secret key for HS256 algorithm (in production, use a strong key)
-        byte[] key = Decoders.BASE64.decode("dGhpcyBpcyBhIHZlcnkgc2VjdXJlIHNlY3JldCBrZXk=");
+        System.out.println("This is secret key: " + JWT_SECRET);
+        byte[] key = Decoders.BASE64.decode(JWT_SECRET);
         return Keys.hmacShaKeyFor(key); // Return the secret key for signing
     }
 
