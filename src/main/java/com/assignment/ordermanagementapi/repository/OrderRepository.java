@@ -7,13 +7,14 @@ import com.assignment.ordermanagementapi.entity.Client;
 import com.assignment.ordermanagementapi.entity.Order;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    List<Order> findByClient(Client client,  Pageable pageable);;
+    List<Order> findByClient(Client client,  Pageable pageable);
 
     List<Order> findByStatus(String status);
-    
-    Order findByOrderReference(String orderReference);
+
+    Optional<Order> findByOrderReference(String orderReference);
     
 }

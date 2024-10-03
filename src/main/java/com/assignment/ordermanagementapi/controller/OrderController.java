@@ -1,7 +1,6 @@
 package com.assignment.ordermanagementapi.controller;
 
 import java.util.Map;
-import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.assignment.ordermanagementapi.dto.OrderCreateRequest;
-import com.assignment.ordermanagementapi.entity.Order;
+import com.assignment.ordermanagementapi.dto.OrderHistoryResponse;
 import com.assignment.ordermanagementapi.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
@@ -53,10 +52,10 @@ public class OrderController {
                                 @RequestHeader("Authorization") String token) {
         try {
             String extractedToken = token.substring(7);
-            String[] parts = orderReference.split("_");
-            Long orderId = Long.parseLong(parts[parts.length - 1]);
+//            String[] parts = orderReference.split("_");
+//            Long orderId = Long.parseLong(parts[parts.length - 1]);
 
-            return ResponseEntity.ok(orderService.cancelOrder(orderId, extractedToken));
+            return ResponseEntity.ok(orderService.cancelOrder(orderReference, extractedToken));
         } catch (IllegalArgumentException e) {
             if ("Invalid order reference!".equals(e.getMessage())){
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("msg", "Invalid order reference!"));
@@ -70,17 +69,16 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/history/{clientId}/{page}/{size}")
-    public ResponseEntity<List<Order>> fetchOrderHistory(
+    @GetMapping("/history/{page}/{size}")
+    public ResponseEntity<OrderHistoryResponse> fetchOrderHistory(
             @RequestHeader("Authorization") String token,
-            // @PathVariable Long clientId,
             @PathVariable int page, 
             @PathVariable int size) {
 
         String extractedToken = token.substring(7);
         
-        List<Order> orderHistory = orderService.fetchOrderHistory(extractedToken, PageRequest.of(page, size));
-        return ResponseEntity.ok(orderHistory);
+        // List<Order> orderHistory = orderService.fetchOrderHistory(extractedToken, PageRequest.of(page, size));
+        return ResponseEntity.ok(orderService.fetchOrderHistory(extractedToken, PageRequest.of(page, size)));
     }
     
 }

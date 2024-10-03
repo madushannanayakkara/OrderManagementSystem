@@ -3,6 +3,7 @@ package com.assignment.ordermanagementapi.service.impl;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.assignment.ordermanagementapi.dto.OrderCreateRequest;
 import com.assignment.ordermanagementapi.dto.OrderCreateResponse;
+import com.assignment.ordermanagementapi.dto.OrderHistoryBase;
+import com.assignment.ordermanagementapi.dto.OrderHistoryResponse;
 import com.assignment.ordermanagementapi.entity.Client;
 import com.assignment.ordermanagementapi.entity.Order;
 import com.assignment.ordermanagementapi.entity.OrderStatus;
@@ -61,14 +64,14 @@ public class OrderServiceImpl implements OrderService {
         return response;
     }
 
-    public Map<String, String> cancelOrder(Long orderId, String token) {
+    public Map<String, String> cancelOrder(String orderReference, String token) {
         Map<String, String> response = new HashMap<>();
 
         String userEmail = jwtService.extractUserName(token);
         Client client = clientRepository.findByEmail(userEmail)
                 .orElseThrow();
 
-        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Optional<Order> optionalOrder = orderRepository.findByOrderReference(orderReference);
 
         if(!optionalOrder.isPresent()){
             throw new IllegalArgumentException("Invalid order reference!");
@@ -91,16 +94,36 @@ public class OrderServiceImpl implements OrderService {
         return response;
     }
 
-    public List<Order> fetchOrderHistory(String token, Pageable pageable) {
+    public OrderHistoryResponse fetchOrderHistory(String token, Pageable pageable) {
         String userEmail = jwtService.extractUserName(token);
         Client client = clientRepository.findByEmail(userEmail).orElseThrow();
-        List<Order>  order = orderRepository.findByClient(client, pageable);
-        return order;
+        OrderHistoryResponse orderHistoryResponse = new OrderHistoryResponse();
+
+        orderHistoryResponse.setEmail(userEmail);
+
+        List<Order> orderList = orderRepository.findByClient(client, pageable);
+        List<OrderHistoryBase> orderHistoryBaseList = new ArrayList<>();
+
+        orderList.forEach(order -> {
+            OrderHistoryBase orderHistoryBase = new OrderHistoryBase();
+            orderHistoryBase.setOrderReference(order.getOrderReference());
+            orderHistoryBase.setItemName(order.getItemName());
+            orderHistoryBase.setQuantity(order.getQuantity());
+            orderHistoryBase.setAddress_line_1(order.getAddress_line_1());
+            orderHistoryBase.setAddress_line_2(order.getAddress_line_2());
+            orderHistoryBase.setAddress_line_3(order.getAddress_line_3());
+            orderHistoryBase.setStatus(order.getStatus());
+
+            orderHistoryBaseList.add(orderHistoryBase);
+        });
+
+        orderHistoryResponse.setOrderHistory(orderHistoryBaseList);
+
+        return orderHistoryResponse;
     }
 
     public List<Order> getOrdersByState(String state){
-        List<Order> newOrders = orderRepository.findByStatus(state);
-        return newOrders;
+        return orderRepository.findByStatus(state);
     }
 
     public Order updateOrder(Order order) {
