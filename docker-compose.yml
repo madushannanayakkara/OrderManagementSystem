@@ -9,7 +9,7 @@ services:
       MYSQL_DATABASE: order_management_sys
 
   app:
-    image: api-platform
+    image: order-management
     depends_on:
       - mysqldb
     build: .
@@ -18,5 +18,6 @@ services:
       - 8080:8080
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/order_management_sys?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: MAprasan@a99
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: MAprasan@a99
+      JWT_SECRET: dGhpcyBpcyBhIHZlcnkgc2VjdXJlIHNlY3JldCBrZXk=
