@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.assignment.ordermanagementapi.dto.OrderCreateRequest;
+import com.assignment.ordermanagementapi.exception.JWTException;
 import com.assignment.ordermanagementapi.service.OrderService;
 
 import io.jsonwebtoken.JwtException;
@@ -62,8 +63,6 @@ public class OrderController {
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg", e.getMessage()));
             }
-        } catch (JwtException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("msg", "Invalid token provided!"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("msg", "An unexpected error occurred!"));
         }
@@ -79,8 +78,6 @@ public class OrderController {
             String extractedToken = token.substring(7);
             
             return ResponseEntity.ok(orderService.fetchOrderHistory(extractedToken, PageRequest.of(page, size)));
-        } catch (JwtException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("msg", "Invalid token provided!"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("msg", "An unexpected error occurred!"));
         }

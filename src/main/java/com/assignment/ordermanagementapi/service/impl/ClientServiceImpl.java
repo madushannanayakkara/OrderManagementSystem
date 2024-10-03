@@ -29,9 +29,5 @@ public class ClientServiceImpl implements ClientService {
             
         };
     }
-
-    // public Client createClient(Client client) {
-    //     return clientRepository.save(client);
-    // }
     
 }
